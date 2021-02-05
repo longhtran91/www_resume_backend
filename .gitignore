@@ -246,3 +246,4 @@ $RECYCLE.BIN/
 #SAM build
 .aws-sam/*
 samconfig.toml
+.vscode/settings.json
