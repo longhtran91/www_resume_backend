@@ -1,3 +1,5 @@
+import os, sys
+print(sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 import unittest
 import custom_cors_check as CCC
 
