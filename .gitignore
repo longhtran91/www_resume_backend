@@ -245,3 +245,4 @@ $RECYCLE.BIN/
 
 #SAM build
 .aws-sam/*
+samconfig.toml
