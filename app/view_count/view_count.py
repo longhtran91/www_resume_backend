@@ -19,13 +19,15 @@ def get_increment_view_count(action, table_name, dynamodb=None):
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    table_name = 'www_resume'
+    ssm = boto3.client('ssm')
+    parameter = ssm.get_parameter(Name='/www_resume/db/table_name')
+    table_name = parameter['Parameter']['Value']
     response =  get_increment_view_count(0, table_name, dynamodb)
     if (response['ResponseMetadata']['HTTPStatusCode'] == 200):
         view_count = response['Attributes']['view_count']
         return {
             'statusCode': 200,
-            'body': {
-                'view_count': view_count
-            }
+            'body': json.dumps({
+                'view_count': str(view_count)
+            })
         }

@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  www_resume_backend
+
+  Sample SAM Template for www_resume_backend
+
+Globals:
+  Api:
+    OpenApiVersion: 3.0.1
+  Function:
+    Timeout: 3
+
+Resources:
+  wwwResumeApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Domain:
+        BasePath:
+          - wwwresume
+        CertificateArn: '{{resolve:ssm:/config/main_cert_arn:1}}'
+        DomainName: demoapi.lhtran.com
+        EndpointConfiguration: EDGE
+        SecurityPolicy: TLS_1_2
+        Route53:
+          HostedZoneName: lhtran.com.
+  wwwResumeTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: action
+        Type: Number
+      SSESpecification:
+        SSEEnabled: True
+      TableName: '{{resolve:ssm:/www_resume/db/table_name:1}}'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  wwwResumeLambdaDDBRoleQueryUpdate:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: Lambda_DynamoDB_www_resume_query_update_view_count
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: wwwResumeLambdaDDBPolicyQueryUpdate
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 'dynamodb:Query'
+                  - 'dynamodb:UpdateItem'
+                  - 'ssm:GetParameter'
+                Resource:
+                  - !GetAtt wwwResumeTable.Arn
+                  - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/www_resume/*'
+  CustomCORSCheck:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/custom_cors_check
+      Handler: custom_cors_check.lambda_handler
+      Runtime: python3.8
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref wwwResumeApi
+            Path: /get_view_count
+            Method: options
+  GetViewCount:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/view_count
+      Handler: view_count.lambda_handler
+      Runtime: python3.8
+      Role: !GetAtt wwwResumeLambdaDDBRoleQueryUpdate.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref wwwResumeApi
+            Path: /get_view_count
+            Method: get
+
+Outputs:
+  wwwResumeApi:
+    Description: "API Gateway endpoint URL for prod stage for wwwResume backend"
+    Value: !Sub "wwwResumeApi.Arn"
+  CustomCORSCheck:
+    Description: "CustomCORSCheck Lambda Function ARN"
+    Value: !GetAtt CustomCORSCheck.Arn
+  GetViewCount:
+    Description: "GetViewCount Lambda Function ARN"
+    Value: !GetAtt GetViewCount.Arn
+  wwwResumeTable:
+    Description: "Simple Table wwwResumeTable for GetViewCount function"
+    Value: !GetAtt wwwResumeTable.Arn
