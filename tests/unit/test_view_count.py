@@ -1,7 +1,8 @@
-import unittest
-import boto3
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+import unittest, boto3
 from moto import mock_dynamodb2
-import view_count as ViewCount
+from app.view_count import view_count as ViewCount
 
 def create_table(table_name, dynamodb=None):
     if not dynamodb:

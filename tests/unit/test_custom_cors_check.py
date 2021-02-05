@@ -1,5 +1,7 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 import unittest
-import custom_cors_check as CCC
+from app.custom_cors_check import custom_cors_check as CCC
 
 class CustomCORSCheck(unittest.TestCase):
     def setUp(self):
