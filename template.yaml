@@ -20,7 +20,7 @@ Resources:
         BasePath:
           - 'www_resume'
         CertificateArn: '{{resolve:ssm:/config/main_cert_arn:1}}'
-        DomainName: '{{resolve:ssm:/www_resume/domain/api_domain_name:1}}'
+        DomainName: '{{resolve:ssm:/www_resume/domain/api_domain_name:2}}'
         EndpointConfiguration: EDGE
         SecurityPolicy: TLS_1_2
         Route53:
