@@ -1,4 +1,4 @@
-name: AWS Lambda & API gateway deployment demonstration
+name: API gateway, AWS Lambda, AWS DynamoDB deployment for www_backend
 #Triggers the workflow on push request events to master branch
 on:
   push:
