@@ -19,12 +19,12 @@ Resources:
       Domain:
         BasePath:
           - 'www_resume'
-        CertificateArn: '{{resolve:ssm:/config/main_cert_arn:1}}'
-        DomainName: '{{resolve:ssm:/www_resume/domain/api_domain_name:1}}'
+        CertificateArn: '{{resolve:ssm:/config/main_cert_arn}}'
+        DomainName: '{{resolve:/www_resume/domain/api_domain_name}}'
         EndpointConfiguration: EDGE
         SecurityPolicy: TLS_1_2
         Route53:
-          HostedZoneName: '{{resolve:ssm:/config/hostedzone:1}}' 
+          HostedZoneName: '{{resolve:ssm:/config/hostedzone}}' 
   wwwResumeTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -33,7 +33,7 @@ Resources:
         Type: Number
       SSESpecification:
         SSEEnabled: True
-      TableName: '{{resolve:ssm:/www_resume/db/table_name:1}}'
+      TableName: '{{resolve:ssm:/www_resume/db/table_name}}'
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
@@ -74,7 +74,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref wwwResumeApi
-            Path: '/{{resolve:ssm:/www_resume/domain/get_view_path:1}}'
+            Path: '/{{resolve:ssm:/www_resume/domain/get_view_path}}'
             Method: options
   GetViewCount:
     Type: AWS::Serverless::Function
@@ -88,10 +88,10 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref wwwResumeApi
-            Path: '/{{resolve:ssm:/www_resume/domain/get_view_path:1}}'
+            Path: '/{{resolve:ssm:/www_resume/domain/get_view_path}}'
             Method: get
 
 Outputs:
   wwwResumeApi:
     Description: "API Gateway endpoint URL for prod stage for wwwResume backend"
-    Value: !Sub 'https://{{resolve:ssm:/www_resume/domain/api_domain_name:1}}/{{resolve:ssm:/www_resume/domain/api_base_path:1}}/{{resolve:ssm:/www_resume/domain/get_view_path:1}}'
+    Value: !Sub 'https://{{resolve:ssm:/www_resume/domain/api_domain_name}}/{{resolve:ssm:/www_resume/domain/api_base_path}}/{{resolve:ssm:/www_resume/domain/get_view_path}}'
