@@ -13,15 +13,23 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Install dependencies
+    - name: Install program dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install -r app/custom_cors_check/requirements.txt
+        pip install -r app/view_count/requirements.txt
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+    - name: Install test dependencies
+      run: |
+        pip install -r tests/requirements.txt
+    - name: Run unit test
+      run: |
+        pytest /tests/unit
     - name: SAM build
       uses: youyo/aws-sam-action/python3.8@master
       with:
