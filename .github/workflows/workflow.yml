@@ -1,11 +1,10 @@
-name: API Gateway, AWS Lambda & DynamoDB deployment for www_resume_backend
+name: AWS Lambda & API gateway deployment demonstration
 #Triggers the workflow on push request events to master branch
-on: 
+on:
   push:
-    branches: [master]
+    branches: [ master ]
 jobs:
-  build: #build job
-    runs-on: ubuntu-latest
+  build:runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
@@ -21,7 +20,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
-    # Build using SAM 
     - name: SAM Build
       uses: youyo/aws-sam-action/python3.8@master
       with:
@@ -30,7 +28,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION:  us-east-1
-    # Deploy on AWS
     - name: sam deploy
       uses: youyo/aws-sam-action/python3.8@master
       with:
