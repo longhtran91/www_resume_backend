@@ -4,7 +4,7 @@ import requests
 
 class TestApiGateway(unittest.TestCase):
     def setUp(self):
-        self.stack_name = "wwwResumeApp"
+        self.stack_name = "wwwResumeAppBE"
         self.api_name = "wwwResumeApi"
         client = boto3.client("cloudformation")
 
