@@ -1,6 +1,6 @@
 # www_resume_backend
-Website: https://resume.lhtran.com/
-API URL: https://api.lhtran.com/wwwresume/get_view_count
+- Website: https://resume.lhtran.com/
+- API URL: https://api.lhtran.com/wwwresume/get_view_count
 
 This project contains source code and supporting files for a serverless application of personal resume website to display view count. The serverless architecture utilizes AWS API Gateway, Lambda Function and DynamoDB for the backend. The project is deployed with the SAM template and Github Actions. It includes the following files and folders.
 
