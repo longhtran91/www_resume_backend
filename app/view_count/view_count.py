@@ -18,6 +18,7 @@ def get_increment_view_count(action, table_name, dynamodb=None):
     return response
 
 def lambda_handler(event, context):
+    url = event['headers']['origin']
     dynamodb = boto3.resource('dynamodb')
     ssm = boto3.client('ssm')
     parameter = ssm.get_parameter(Name='/www_resume/db/table_name')
@@ -27,6 +28,9 @@ def lambda_handler(event, context):
         view_count = response['Attributes']['view_count']
         return {
             'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': url
+            },
             'body': json.dumps({
                 'view_count': str(view_count)
             })
