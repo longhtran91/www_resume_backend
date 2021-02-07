@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   www_resume_backend
 
-  Sample SAM Template for www_resume_backend
+  SAM Template for www_resume_backend
 
 Globals:
   Api:
