@@ -8,4 +8,7 @@ This project contains source code and supporting files for a serverless applicat
 - template.yaml - SAM template to deploy AWS API Gateway, Lambda Function, and DynamoDB
 - .github/workflows/workflow.yml - Github workflow for CI/CD
 
+Architecture:
+![Architecture Diagram](https://i.imgur.com/uXJ6Qrx.jpg)
+
 Visit https://github.com/longhtran91/www_resume_frontend for the Front End
